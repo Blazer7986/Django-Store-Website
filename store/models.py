@@ -33,7 +33,7 @@ class Products(models.Model):
   # Many to Many Relationship
   promotions = models.ManyToManyField(Promotion)
 
-class Cutomers(models.Model):
+class Customers(models.Model):
   MEMBERSHIP_BRONZE = 'B'
   MEMBERSHIP_SLIVER = 'S'
   MEMBERSHIP_GOLD = 'G'
@@ -47,9 +47,8 @@ class Cutomers(models.Model):
   last_name = models.CharField(max_length=255)
   email = models.EmailField(unique=True)
   phone = models.CharField(max_length=255)
-  birth_day = models.DateField(null=True)
+  birth_date = models.DateField(null=True)
   membership = models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
-  order = models.ForeignKey('Orders', on_delete=models.CASCADE)
 
 class Orders(models.Model):
   STATUS_PENDING = 'P'
@@ -63,7 +62,7 @@ class Orders(models.Model):
   ]
   placed_at = models.DateTimeField(auto_now_add=True)
   payment_status = models.CharField(max_length=1, choices=PAYMENT_STATUS_CHOICES)
-  cutomer = models.ForeignKey(Cutomers, on_delete=models.PROTECT)
+  cutomer = models.ForeignKey(Customers, on_delete=models.PROTECT)
 
 class OrderItems(models.Model):
   order = models.ForeignKey(Orders, on_delete=models.PROTECT)
@@ -79,7 +78,7 @@ class Address(models.Model):
   # One to One Relationship
   # customer = models.OneToOneField(Cutomers, on_delete=models.CASCADE, primary_key=True)
   # One to Many Relationship
-  customer = models.ForeignKey(Cutomers, on_delete=models.CASCADE)
+  customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
 
 
 class Cart(models.Model):
