@@ -39,6 +39,8 @@ class Products(models.Model):
   collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
   # Many to Many Relationship
   promotions = models.ManyToManyField(Promotion)
+  inventory = models.PositiveBigIntegerField(null=True)
+  inventory_status = models.CharField(max_length=3)
   
   def __str__(self) -> str:
     return self.title
