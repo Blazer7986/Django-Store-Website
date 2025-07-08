@@ -1,17 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 from django.db.models import Q, F, Value, Func, ExpressionWrapper, DecimalField
 from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Max, Min, Avg
-from store.models import Products, OrderItems, Orders, Customers
-
+from store.models import Products, OrderItems, Orders, Customers, Collection, Orders
+from tags.models import TagItem
 
 # Create your views here.
 # request --> response
 # request handler
 # action
 
+# @transaction.atomic()
 def say_hello(request):
   # Pull data from a database
   # Transform data
@@ -109,4 +112,55 @@ def say_hello(request):
   #   discount_price = discounted_price
   # ) 
   
+  ### Custom Manager ###
+  # TagItem.objects.get_tags_for(Products, 1)
+  
+  ### Understnading QuerySet Cache ###
+  # query_set = Products.objects.all()
+  # list(query_set)
+  # query_set[0]
+  
+  ### Creating Objects ###
+  # collection = Collection()
+  # collection.title = "Video Games"
+  # collection.featured_product = Products(pk=1)
+  # collection.featured_product_id = 1
+  # collection.save() # Insert new collection
+
+  # Short-hand method
+  # collection = Collection.objects.create(title='a', feature_product_id=1)
+  
+  ### Updating Objects ###
+  # collection = Collection.objects.get(pk=11)
+  # collection.featured_product = None
+  # collection.save()
+  
+  # Short-hand method
+  # collection = Collection.objects.filter(pk=11).update(feature_product_id=None)
+  
+  ### Delete Objects ###
+  # collection = Collection(pk=11)
+  # collection.delete()
+  
+  # Short-hand method
+  # Collection.objects.filter(id__gt=5).delete()
+  
+  ### Transaction: Changes must change or rollback ###
+  # ...
+  
+  # with transaction.atomic():
+  #   order = Orders()
+  #   order.customer_id = 1
+  #   order.save()
+    
+  #   item = OrderItems()
+  #   item.order = order
+  #   item.product_id = 1
+  #   item.quantity = 1
+  #   item.unit_price = 10
+  #   item.save()
+  
+  ### Executing Raw SQL Queries ###
+  
+ 
   return render(request, 'hello.html', {'name': 'Sam'})
