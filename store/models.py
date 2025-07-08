@@ -18,6 +18,13 @@ class Promotion(models.Model):
 class Collection(models.Model):
   title = models.CharField(max_length=255)
   featured_product = models.ForeignKey('Products', on_delete=models.SET_NULL, null=True, related_name='+')
+  
+  def __str__(self) -> str:
+      return self.title
+
+  class Meta:
+    ordering = ['title']
+  
 
 class Products(models.Model):
   # This how we normally make an id but its not needed in this case
@@ -32,6 +39,13 @@ class Products(models.Model):
   collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
   # Many to Many Relationship
   promotions = models.ManyToManyField(Promotion)
+  
+  def __str__(self) -> str:
+    return self.title
+  
+  class Meta:
+    ordering = ['title']
+
 
 class Customers(models.Model):
   MEMBERSHIP_BRONZE = 'B'
@@ -50,6 +64,13 @@ class Customers(models.Model):
   birth_date = models.DateField(null=True)
   membership = models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
   # order_set
+  
+  def __str__(self) -> str:
+    return self.first_name
+  
+  class Meta:
+    ordering = ['first_name', 'last_name']
+
 
 class Orders(models.Model):
   STATUS_PENDING = 'P'
