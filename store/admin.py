@@ -16,16 +16,22 @@ class InventoryFilter(admin.SimpleListFilter):
   def queryset(self, request, queryset):
     if self.value() == '<10':
       queryset.filter(inventory__lt=10)
-      
+
+class OrderItemInline(admin.TabularInline):
+  autocomplete_fields = ['product']
+  model = models.OrderItems
+  min_num = 1
+  max_num = 10
+  extra = 0
+ 
 ### Orders ####
 @admin.register(models.Orders)
 class OrderAdmin(admin.ModelAdmin):
   autocomplete_fields = ['cutomer']
+  inlines = [OrderItemInline]
   list_display = ['placed_at', 'payment_status', 'cutomer']
   list_editable = ['payment_status']
   list_per_page = 50
-  
-  
 
 ### Products ####
 @admin.register(models.Products)
