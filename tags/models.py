@@ -1,7 +1,7 @@
 from django.db import models
 # Allows generic relationships
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 class Tags(models.Model):
@@ -12,6 +12,6 @@ class TagItem(models.Model):
   tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
   # Type (product, video, article)
   # ID 
-  # contentType = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-  # object_id = models.PositiveIntegerField()
-  # content_object = GenericForeignKey()
+  content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+  object_id = models.PositiveBigIntegerField()
+  content_object = GenericForeignKey()
