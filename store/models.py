@@ -64,13 +64,6 @@ class Customers(models.Model):
   birth_date = models.DateField(null=True)
   membership = models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
   # order_set
-  
-  def __str__(self) -> str:
-    return self.first_name
-  
-  class Meta:
-    ordering = ['first_name', 'last_name']
-
 
 class Orders(models.Model):
   STATUS_PENDING = 'P'
