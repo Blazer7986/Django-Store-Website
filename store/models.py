@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 # Create your models here.
 # Django will automatically insert an ID to classes
 
@@ -31,14 +32,18 @@ class Products(models.Model):
   # sku = models.CharField(max_length=10, primary_key=True)
   title = models.CharField(max_length=255) # SQL varchar(255)
   slug = models.SlugField()
-  description = models.TextField()
+  description = models.TextField(null=True, blank=True) # blank makes variable not required
   # Don't use FloatFeild in this case # SQL float
-  unit_price = models.DecimalField(max_digits=6, decimal_places=2) 
-  inventory = models.IntegerField()
+  unit_price = models.DecimalField(
+    max_digits=6, 
+    decimal_places=2,
+    validators=[MinValueValidator(1)]
+  ) 
+  inventory = models.IntegerField(validators=[MinValueValidator(1)])
   last_updated = models.DateTimeField(auto_now=True)
   collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
   # Many to Many Relationship
-  promotions = models.ManyToManyField(Promotion)
+  promotions = models.ManyToManyField(Promotion, blank=True)
   inventory = models.PositiveBigIntegerField(null=True)
   inventory_status = models.CharField(max_length=3)
   
