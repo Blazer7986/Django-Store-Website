@@ -65,6 +65,7 @@ class Orders(models.Model):
   cutomer = models.ForeignKey(Customers, on_delete=models.PROTECT)
 
 class OrderItems(models.Model):
+  # orderitem_set
   order = models.ForeignKey(Orders, on_delete=models.PROTECT)
   product = models.ForeignKey(Products, on_delete=models.PROTECT)
   quantity = models.PositiveSmallIntegerField()
