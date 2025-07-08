@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
-from django.db import transaction
+from django.db import transaction, connection
 from django.db.models import Q, F, Value, Func, ExpressionWrapper, DecimalField
 from django.db.models.functions import Concat
 from django.db.models.aggregates import Count, Max, Min, Avg
@@ -161,6 +161,16 @@ def say_hello(request):
   #   item.save()
   
   ### Executing Raw SQL Queries ###
+  # query_set = Products.objects.raw('SELECT id, title FROM store_product')
+
+  # cursor = connection.cursor()
+  # cursor.execute('SELECT id, title FROM store_product')
+  # cursor.close()
   
- 
+  # with connection.cursor() as cursor:
+  #   # cursor.execute('SELECT id, title FROM store_product')
+  #   cursor.callproc('get_cutomer', [1, 2, 'a'])
+  
+  
+  
   return render(request, 'hello.html', {'name': 'Sam'})
