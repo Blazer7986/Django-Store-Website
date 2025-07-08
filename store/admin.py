@@ -17,15 +17,26 @@ class InventoryFilter(admin.SimpleListFilter):
     if self.value() == '<10':
       queryset.filter(inventory__lt=10)
       
-
+### Orders ####
 @admin.register(models.Orders)
 class OrderAdmin(admin.ModelAdmin):
+  autocomplete_fields = ['cutomer']
   list_display = ['placed_at', 'payment_status', 'cutomer']
   list_editable = ['payment_status']
   list_per_page = 50
+  
+  
 
+### Products ####
 @admin.register(models.Products)
 class ProductAdmin(admin.ModelAdmin):
+  autocomplete_fields = ['collection']
+  prepopulated_fields = {
+    'slug': ['title']
+  }
+  # fields = ['title', 'slug'] # See title and slug are shown
+  # excludes = ['promotions'] # Excludes promotions
+  # readonly_fields = ['title'] # Cannot change title 
   actions = ['clear_inventory']
   list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
   list_editable = ['unit_price'] # Unit price can be change on the admin side
@@ -51,19 +62,22 @@ class ProductAdmin(admin.ModelAdmin):
   
   def collection_title(self, product):
     return product.collection_set.title
-  
+
+### Customers ###
 @admin.register(models.Customers)
 class CustomerAdmin(admin.ModelAdmin):
+  search_fields = ['id']
   list_display = ['first_name','last_name', 'email', 'membership']
   list_editable = ['membership']
   list_per_page = 50
   ordering = ['first_name', 'last_name']
   search_fields = ['first_name__istartswith', 'last_name__istartswith']
   
-  
+### Collection ###
 @admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
   list_display = ['title', 'product_count']
+  search_fields = ['title']
   
   @admin.display(ordering='product_count')
   def product_count(self, collection):
