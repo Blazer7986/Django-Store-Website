@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.db.models.aggregates import Count
+from django.utils.html import format_html, urlencode
+from django.urls import reverse
 from . import models
 
 
@@ -32,7 +35,27 @@ class CustomerAdmin(admin.ModelAdmin):
   ordering = ['first_name', 'last_name']
   list_per_page = 50
   
+  
+@admin.register(models.Collection)
+class CollectionAdmin(admin.ModelAdmin):
+  list_display = ['title', 'product_count']
+  
+  @admin.display(ordering='product_count')
+  def product_count(self, collection):
+    url = (reverse(
+          'admin:store_product_changelist') 
+          + '?'
+          + urlencode({
+            'collection_id': str(collection.id)
+          }))
+    return format_html('<a href="{}">{}</a>', url, collection.products_count)
+    
+  def get_queryset(self, request):
+    return super().get_queryset(request).annotate(
+      product_count = Count('product')
+    )
+  
 # Register your models here.
-admin.site.register(models.Collection)
+# admin.site.register(models.Collection)
 # admin.site.register(models.Products, ProductAdmin)
-#  admin.site.register(models.Customers)
+# admin.site.register(models.Customers)
