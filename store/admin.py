@@ -1,9 +1,8 @@
 from django.contrib import admin, messages
-from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db.models.aggregates import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
-from ..tags.models import TagItem
+from . import models
 
 class InventoryFilter(admin.SimpleListFilter):
   title = 'Inventory'
@@ -34,9 +33,6 @@ class OrderAdmin(admin.ModelAdmin):
   list_editable = ['payment_status']
   list_per_page = 50
 
-class TagInline(GenericTabularInline):
-  autocomplete_fields = ['tags']
-  model = TagItem
 
 ### Products ####
 @admin.register(models.Products)
@@ -50,7 +46,6 @@ class ProductAdmin(admin.ModelAdmin):
   # excludes = ['promotions'] # Excludes promotions
   # readonly_fields = ['title'] # Cannot change title 
   actions = ['clear_inventory']
-  inlines = [TagInline]
   list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
   list_editable = ['unit_price'] # Unit price can be change on the admin side
   list_filter = ['collection', 'last_updated', InventoryFilter]

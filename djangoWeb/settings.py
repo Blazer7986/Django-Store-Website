@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'store',
     'tags',
-    'like'
+    'like',
+    'store_custom'
 ]
 
 # SITE_ID = 1
